@@ -1,0 +1,20 @@
+{
+  "name": "virtual-jquery",
+  "dependencies": {
+    "qunit": "~1.18.0"
+  },
+  "version": "0.1.0",
+  "homepage": "https://github.com/movableink/virtual-jquery",
+  "authors": [
+    "Tim Evans <tevans@movableink.com>"
+  ],
+  "description": "jQuery API for HTML strings",
+  "main": "dist/virtual-jquery.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ]
+}

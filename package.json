@@ -1,0 +1,34 @@
+{
+  "name": "virtual-jquery",
+  "version": "0.1.0",
+  "description": "jQuery API for HTML strings",
+  "main": "dist/virtual-jquery.js",
+  "scripts": {
+    "start": "ENV=test broccoli serve",
+    "prepublish": "rm -rf dist && broccoli build dist",
+    "test": "rm -rf build && ENV=test broccoli build build; testem ci --port 8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/movableink/virtual-jquery.git"
+  },
+  "author": "Tim Evans <tevans@movableink.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/movableink/virtual-jquery/issues"
+  },
+  "homepage": "https://github.com/movableink/virtual-jquery",
+  "devDependencies": {
+    "babel": "^6.3.13",
+    "broccoli": "^0.16.9",
+    "broccoli-babel-transpiler": "^5.5.0",
+    "broccoli-concat": "^0.0.13",
+    "broccoli-funnel": "^1.0.1",
+    "broccoli-merge-trees": "^1.0.0",
+    "saucie": "^1.3.1",
+    "testem": "^0.9.11"
+  },
+  "dependencies": {
+    "loader.js": "^4.0.1"
+  }
+}

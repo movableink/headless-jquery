@@ -53,6 +53,9 @@ if (env === 'test') {
     ],
     outputFile: '/' + pkg.name + '-tests.js'
   });
+  var jquery = funnel('bower_components/jquery/dist', {
+    destDir: 'assets'
+  });
   var qunit = funnel('bower_components/qunit/qunit', {
     destDir: 'assets'
   });
@@ -69,7 +72,7 @@ if (env === 'test') {
   var index = funnel('tests', {
     include: ['index.html']
   });
-  trees.push(test, qunit, index, loader);
+  trees.push(test, qunit, jquery, index, loader);
 }
 
 module.exports = mergeTrees(trees);

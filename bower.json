@@ -1,7 +1,8 @@
 {
   "name": "virtual-jquery",
   "dependencies": {
-    "qunit": "~1.18.0"
+    "qunit": "~1.18.0",
+    "jquery": "^2.2.1"
   },
   "version": "0.1.0",
   "homepage": "https://github.com/movableink/virtual-jquery",

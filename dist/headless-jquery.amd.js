@@ -180,7 +180,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
         return collection;
       }, []);
 
-      return toCollection(children);
+      return toCollection(children, this);
     }
   };
 
@@ -193,6 +193,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       wrappedElements[key] = CollectionMethods[key];
     });
 
+    wrappedElements.document = scope.document;
     return wrappedElements;
   }
 

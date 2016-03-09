@@ -173,12 +173,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
         return element.children().toArray();
       }).reduce(function (a, b) {
         return a.concat(b);
-      }).reduce(function (collection, item) {
+      }, []).reduce(function (collection, item) {
         if (collection.indexOf(item) === -1) {
           collection.push(item);
         }
         return collection;
-      });
+      }, []);
 
       return toCollection(children);
     }

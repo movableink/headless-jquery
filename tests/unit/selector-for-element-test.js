@@ -1,6 +1,6 @@
-import selectorForElement from 'virtual-jquery/selector-for-element';
+import selectorForElement from 'headless-jquery/selector-for-element';
 
-module('virtual-jquery/selector-for-element');
+module('headless-jquery/selector-for-element');
 
 test('id attribute for element', function (assert) {
   assert.equal(selectorForElement($('#test-id')), '#test-id');

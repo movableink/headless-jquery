@@ -1,16 +1,16 @@
 {
-  "name": "virtual-jquery",
+  "name": "headless-jquery",
   "dependencies": {
     "qunit": "~1.18.0",
     "jquery": "^2.2.1"
   },
   "version": "0.1.0",
-  "homepage": "https://github.com/movableink/virtual-jquery",
+  "homepage": "https://github.com/movableink/headless-jquery",
   "authors": [
     "Tim Evans <tevans@movableink.com>"
   ],
   "description": "jQuery API for HTML strings",
-  "main": "dist/virtual-jquery.js",
+  "main": "dist/headless-jquery.js",
   "license": "MIT",
   "ignore": [
     "**/.*",

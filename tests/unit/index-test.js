@@ -1,6 +1,6 @@
-import V$ from 'virtual-jquery';
+import V$ from 'headless-jquery';
 
-module('virtual-jquery');
+module('headless-jquery');
 
 test('toString returns the HTML serialized back to a string', function (assert) {
   let $html = V$(`

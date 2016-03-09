@@ -1,6 +1,6 @@
-import Symbol from 'virtual-jquery/symbol';
+import Symbol from 'headless-jquery/symbol';
 
-module('virtual-jquery/symbol');
+module('headless-jquery/symbol');
 
 test('creating an instance of a Symbol with throw an error', function (assert) {
   assert.throws(function () {

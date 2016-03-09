@@ -1,6 +1,6 @@
-import Map from 'virtual-jquery/map';
+import Map from 'headless-jquery/map';
 
-module('virtual-jquery/map', {
+module('headless-jquery/map', {
   beforeEach() {
     this.subject = new Map();
   }

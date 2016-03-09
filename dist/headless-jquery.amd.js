@@ -1,18 +1,23 @@
-define('virtual-jquery/document', ['exports', 'module', 'virtual-jquery/element', 'virtual-jquery/map'], function (exports, module, _virtualJqueryElement, _virtualJqueryMap) {
+define('headless-jquery/document', ['exports', 'module', 'headless-jquery/element', 'headless-jquery/map', 'headless-jquery/symbol'], function (exports, module, _headlessJqueryElement, _headlessJqueryMap, _headlessJquerySymbol) {
   'use strict';
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  var _Element = _interopRequireDefault(_virtualJqueryElement);
+  var _Element = _interopRequireDefault(_headlessJqueryElement);
 
-  var _Map = _interopRequireDefault(_virtualJqueryMap);
+  var _Map = _interopRequireDefault(_headlessJqueryMap);
+
+  var _Symbol = _interopRequireDefault(_headlessJquerySymbol);
+
+  var LOOKUP = _Symbol['default']['for']('lookup');
+  var TRIGGER = _Symbol['default']['for']('trigger');
 
   function Document(root) {
     var elements = new _Map['default']();
 
     this.element = root.document;
     this.document = this;
-    this.trigger = function (eventName) {
+    this[TRIGGER] = function (eventName) {
       for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         args[_key - 1] = arguments[_key];
       }
@@ -21,9 +26,10 @@ define('virtual-jquery/document', ['exports', 'module', 'virtual-jquery/element'
     };
 
     var self = this;
-    this.lookup = function Document$lookup(rawElement) {
+    this[LOOKUP] = function Document$lookup(rawElement) {
       if (!elements.has(rawElement)) {
-        elements.set(rawElement, new _Element['default'](rawElement, self));
+        var element = new _Element['default'](rawElement, self);
+        elements.set(rawElement, element);
       }
 
       return elements.get(rawElement);
@@ -34,12 +40,17 @@ define('virtual-jquery/document', ['exports', 'module', 'virtual-jquery/element'
 
   module.exports = Document;
 });
-define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-for-element'], function (exports, module, _virtualJquerySelectorForElement) {
+define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol', 'headless-jquery/selector-for-element'], function (exports, module, _headlessJquerySymbol, _headlessJquerySelectorForElement) {
   'use strict';
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  var _selectorForElement = _interopRequireDefault(_virtualJquerySelectorForElement);
+  var _Symbol = _interopRequireDefault(_headlessJquerySymbol);
+
+  var _selectorForElement = _interopRequireDefault(_headlessJquerySelectorForElement);
+
+  var LOOKUP = _Symbol['default']['for']('lookup');
+  var TRIGGER = _Symbol['default']['for']('trigger');
 
   function Element(element, document) {
     this.element = element;
@@ -72,7 +83,7 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
 
     parent: function parent() {
       var parent = $(this.element).parent()[0];
-      return this.document.lookup(parent);
+      return this.document[LOOKUP](parent);
     },
 
     siblings: function siblings() {
@@ -90,8 +101,8 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
     html: function html(value) {
       if (arguments.length === 1) {
         $(this.element).html(value);
-        this.document.trigger('setHtml', this.selector, value);
-        this.document.trigger('change');
+        this.document[TRIGGER]('setHTML', this.selector, value);
+        this.document[TRIGGER]('change');
       }
       return $(this.element).html();
     },
@@ -99,11 +110,11 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
     attr: function attr(attrName, value) {
       if (arguments.length === 2) {
         $(this.element).attr(attrName, value);
-        this.document.trigger('setAttr', this.selector, attrName, value);
-        this.document.trigger('change');
+        this.document[TRIGGER]('setAttr', this.selector, attrName, value);
+        this.document[TRIGGER]('change');
 
         if (attrName === 'id' || attrName === 'class') {
-          this.selector = getSelector($(this.element));
+          this.selector = _selectorForElement['default']($(this.element));
         }
       }
       return $(this.element).attr(attrName);
@@ -112,20 +123,20 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
     css: function css(key, value) {
       if (arguments.length === 2) {
         $(this.element).css(key, value);
-        this.document.trigger('setStyle', this.selector, key, value);
-        this.document.trigger('change');
+        this.document[TRIGGER]('setStyle', this.selector, key, value);
+        this.document[TRIGGER]('change');
       }
       return $(this.element).css(key);
     },
 
     replaceWith: function replaceWith(html) {
       $(this.element).replaceWith(html);
-      this.document.trigger('setOuterHTML', this.selector, html);
-      this.document.trigger('change');
+      this.document[TRIGGER]('setOuterHTML', this.selector, html);
+      this.document[TRIGGER]('change');
     }
   };
 
-  CollectionMethods = {
+  var CollectionMethods = {
     html: function html(value) {
       if (arguments.length === 1) {
         this._elements.forEach(function (element) {
@@ -175,7 +186,7 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
 
   function toCollection(elements, scope) {
     var wrappedElements = elements.toArray().map(function (element) {
-      return scope.document.lookup(element);
+      return scope.document[LOOKUP](element);
     });
 
     Object.keys(CollectionMethods).forEach(function (key) {
@@ -187,36 +198,49 @@ define('virtual-jquery/element', ['exports', 'module', 'virtual-jquery/selector-
 
   module.exports = Element;
 });
-define('virtual-jquery', ['exports', 'module', 'virtual-jquery/document'], function (exports, module, _virtualJqueryDocument) {
+define('headless-jquery', ['exports', 'module', 'headless-jquery/document', 'headless-jquery/symbol'], function (exports, module, _headlessJqueryDocument, _headlessJquerySymbol) {
   'use strict';
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  var _Document = _interopRequireDefault(_virtualJqueryDocument);
+  var _Document = _interopRequireDefault(_headlessJqueryDocument);
 
-  function VirtualJQuery(html) {
+  var _Symbol = _interopRequireDefault(_headlessJquerySymbol);
+
+  var EVENTS = _Symbol['default']();
+  var DOCUMENT = _Symbol['default']();
+
+  function Root(html) {
     var parser = new DOMParser();
     this.document = parser.parseFromString(html, 'text/html');
 
-    // Subscriptions for change events / whatnot
-    this._subscriptions = {};
-    this._document = new _Document['default'](this);
-  };
+    this[EVENTS] = {};
+    this[DOCUMENT] = new _Document['default'](this);
+  }
 
-  VirtualJQuery.prototype = {
+  Root.prototype = {
     $: function $(selector) {
-      return this._document.find(selector);
+      return this[DOCUMENT].find(selector);
     },
 
     find: function find(selector) {
-      return this.$(selector);
+      return this[DOCUMENT].find(selector);
     },
 
     on: function on(eventName, callback) {
-      if (this._subscriptions[eventName]) {
-        this._subscriptions[eventName].push(callback);
+      var events = this[EVENTS];
+      if (events[eventName]) {
+        events[eventName].push(callback);
       } else {
-        this._subscriptions[eventName] = [callback];
+        events[eventName] = [callback];
+      }
+    },
+
+    off: function off(eventName, callback) {
+      var events = this[EVENTS];
+      if (events[eventName]) {
+        var index = events[eventName].indexOf(callback);
+        events[eventName].splice(index, 1);
       }
     },
 
@@ -225,7 +249,8 @@ define('virtual-jquery', ['exports', 'module', 'virtual-jquery/document'], funct
         args[_key - 1] = arguments[_key];
       }
 
-      var callbacks = this._subscriptions[eventName] || [];
+      var events = this[EVENTS];
+      var callbacks = events[eventName] || [];
       callbacks.forEach(function (callback) {
         callback.apply(undefined, args);
       });
@@ -236,59 +261,70 @@ define('virtual-jquery', ['exports', 'module', 'virtual-jquery/document'], funct
     }
   };
 
-  module.exports = VirtualJQuery;
+  module.exports = function (html) {
+    return new Root(html);
+  };
 });
-define("virtual-jquery/map", ["exports"], function (exports) {
-  "use strict";
+define('headless-jquery/map', ['exports', 'module', 'headless-jquery/symbol'], function (exports, module, _headlessJquerySymbol) {
+  'use strict';
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+  var _Symbol = _interopRequireDefault(_headlessJquerySymbol);
+
+  var KEYS = _Symbol['default']();
+  var VALUES = _Symbol['default']();
 
   var Map = (function () {
     function Map() {
       _classCallCheck(this, Map);
 
-      this._keys = [];
-      this._values = [];
+      this[KEYS] = [];
+      this[VALUES] = [];
       this.size = 0;
     }
 
     Map.prototype.get = function get(key) {
-      var index = this._keys.indexOf(key);
+      var index = this[KEYS].indexOf(key);
       if (index === -1) {
         return undefined;
       }
-      return this._values[index];
+      return this[VALUES][index];
     };
 
     Map.prototype.set = function set(key, value) {
-      var index = this._keys.indexOf(key);
+      var index = this[KEYS].indexOf(key);
       if (index === -1) {
-        index = this._keys.length;
+        index = this[KEYS].length;
         this.size++;
       }
-      this._keys[index] = key;
-      this._values[index] = value;
+      this[KEYS][index] = key;
+      this[VALUES][index] = value;
     };
 
-    Map.prototype["delete"] = function _delete(key) {
-      var index = this._keys.indexOf(key);
+    Map.prototype['delete'] = function _delete(key) {
+      var index = this[KEYS].indexOf(key);
       if (index === -1) {
         return false;
       }
-      delete this._keys[index];
-      delete this._values[index];
+      delete this[KEYS][index];
+      delete this[VALUES][index];
       this.size--;
       return true;
     };
 
     Map.prototype.has = function has(key) {
-      return this._keys.indexOf(key) !== -1;
+      return this[KEYS].indexOf(key) !== -1;
     };
 
     return Map;
   })();
+
+  module.exports = Map;
 });
-define('virtual-jquery/selector-for-element', ['exports', 'module'], function (exports, module) {
+define('headless-jquery/selector-for-element', ['exports', 'module'], function (exports, module) {
   'use strict';
 
   function getSelector(_x2) {
@@ -311,11 +347,17 @@ define('virtual-jquery/selector-for-element', ['exports', 'module'], function (e
 
       // Determine the IDs and path.
       var id = $element.attr('id');
+      if (id) {
+        if (path === '') {
+          return '#' + id;
+        }
+      }
+
       var classNames = $element.attr('class');
 
       // Add the #id if there is one.
       if (id != null) {
-        selector += '#' + id;
+        selector = '#' + id;
         // Add any classes.
       } else if (classNames != null) {
           selector += '.' + classNames.split(/[\s\n]+/).join('.');
@@ -335,4 +377,37 @@ define('virtual-jquery/selector-for-element', ['exports', 'module'], function (e
   }
 
   module.exports = getSelector;
+});
+define('headless-jquery/symbol', ['exports', 'module'], function (exports, module) {
+  'use strict';
+
+  var sharedSymbols = {};
+
+  function generateSymbol() {
+    var uid = [1, 2, 3].map(function () {
+      return Math.round(Math.random() * 0x100000).toString(16);
+    }).join('-');
+    return '_symbol_' + uid;
+  }
+
+  function Symbol(key) {
+    if (this instanceof Symbol) {
+      throw new TypeError('Cannot call `new` on Symbol');
+    }
+
+    var symbol = generateSymbol();
+    if (key) {
+      sharedSymbols[key] = symbol;
+    }
+    return symbol;
+  }
+
+  Symbol['for'] = function (key) {
+    if (sharedSymbols[key]) {
+      return sharedSymbols[key];
+    }
+    return Symbol(key);
+  };
+
+  module.exports = Symbol;
 });

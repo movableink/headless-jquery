@@ -1,6 +1,6 @@
-import Symbol from 'virtual-jquery/symbol';
-import selectorForElement from 'virtual-jquery/selector-for-element';
-import Element from 'virtual-jquery/element';
+import Symbol from 'headless-jquery/symbol';
+import selectorForElement from 'headless-jquery/selector-for-element';
+import Element from 'headless-jquery/element';
 
 function MockDocument() {
   const LOOKUP = Symbol.for('lookup');
@@ -31,7 +31,7 @@ function MockDocument() {
   return document;
 }
 
-module('virtual-jquery/element');
+module('headless-jquery/element');
 
 test('tagName is set on the element', function (assert) {
   let doc = MockDocument();

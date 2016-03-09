@@ -1,8 +1,8 @@
 {
-  "name": "virtual-jquery",
+  "name": "headless-jquery",
   "version": "0.1.0",
   "description": "jQuery API for HTML strings",
-  "main": "dist/virtual-jquery.js",
+  "main": "dist/headless-jquery.js",
   "scripts": {
     "start": "ENV=test broccoli serve",
     "prepublish": "rm -rf dist && broccoli build dist",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/movableink/virtual-jquery.git"
+    "url": "https://github.com/movableink/headless-jquery.git"
   },
   "author": "Tim Evans <tevans@movableink.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/movableink/virtual-jquery/issues"
+    "url": "https://github.com/movableink/headless-jquery/issues"
   },
-  "homepage": "https://github.com/movableink/virtual-jquery",
+  "homepage": "https://github.com/movableink/headless-jquery",
   "devDependencies": {
     "babel": "^6.3.13",
     "broccoli": "^0.16.9",

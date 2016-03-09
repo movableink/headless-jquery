@@ -74,7 +74,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
 
       return $;
     })(function (selector) {
-      return toCollection($(this.element).find(selector), this);
+      return castJQueryToCollection($(this.element).find(selector), this);
     }),
 
     find: function find(selector) {
@@ -87,11 +87,11 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     },
 
     siblings: function siblings() {
-      return toCollection($(this.element).parent().children(), this);
+      return castJQueryToCollection($(this.element).parent().children(), this);
     },
 
     children: function children() {
-      return toCollection($(this.element).children(), this);
+      return castJQueryToCollection($(this.element).children(), this);
     },
 
     contains: function contains(other) {
@@ -180,21 +180,25 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
         return collection;
       }, []);
 
-      return toCollection(children, this);
+      return castCollection(children, this);
     }
   };
 
-  function toCollection(elements, scope) {
+  function castCollection(elements, scope) {
+    Object.keys(CollectionMethods).forEach(function (key) {
+      elements[key] = CollectionMethods[key];
+    });
+
+    elements.document = scope.document;
+    return elements;
+  }
+
+  function castJQueryToCollection(elements, scope) {
     var wrappedElements = elements.toArray().map(function (element) {
       return scope.document[LOOKUP](element);
     });
 
-    Object.keys(CollectionMethods).forEach(function (key) {
-      wrappedElements[key] = CollectionMethods[key];
-    });
-
-    wrappedElements.document = scope.document;
-    return wrappedElements;
+    return castCollection(wrappedElements, scope);
   }
 
   module.exports = Element;

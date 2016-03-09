@@ -139,37 +139,37 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
   var CollectionMethods = {
     html: function html(value) {
       if (arguments.length === 1) {
-        this._elements.forEach(function (element) {
+        this.forEach(function (element) {
           element.html(value);
         });
       }
-      return this._elements[0].html();
+      return this[0].html();
     },
 
     attr: function attr(attrName, value) {
       if (arguments.length === 2) {
-        this._elements.forEach(function (element) {
+        this.forEach(function (element) {
           element.attr(attrName, value);
         });
       }
-      return this._elements[0].attr(attrName);
+      return this[0].attr(attrName);
     },
 
     css: function css(attrName, value) {
       if (arguments.length === 2) {
-        this._elements.forEach(function (element) {
+        this.forEach(function (element) {
           element.css(attrName, value);
         });
       }
-      return this._elements[0].css(attrName);
+      return this[0].css(attrName);
     },
 
     parent: function parent() {
-      return this._elements[0].parent();
+      return this[0].parent();
     },
 
     children: function children() {
-      var children = this._elements.map(function (element) {
+      var children = this.map(function (element) {
         return element.children().toArray();
       }).reduce(function (a, b) {
         return a.concat(b);

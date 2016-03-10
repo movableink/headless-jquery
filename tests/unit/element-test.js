@@ -213,6 +213,36 @@ test('setting a style will trigger a setStyle event and a change event', functio
   assert.deepEqual(doc.change.calledWith, []);
 });
 
+test('data() will returns the value of a data-* attribute of an element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#test-id');
+  let el = new Element($el[0], doc);
+
+  assert.equal(el.data('test'), '✔');
+});
+
+test('data() can set a data attribute of an element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#test-id')
+  let el = new Element($el[0], doc);
+
+  el.data('pet', '🐹');
+  assert.equal($el.data('pet'), '🐹');
+});
+
+test('setting a style will trigger a setStyle event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#test-id')
+  let el = new Element($el[0], doc);
+
+  el.data('pet', '🐶');
+
+  assert.deepEqual(doc.setData.called, 1);
+  assert.deepEqual(doc.setData.calledWith, ['#test-id', 'data-pet', '🐶']);
+  assert.deepEqual(doc.change.called, 1);
+  assert.deepEqual(doc.change.calledWith, []);
+});
+
 test('replaceWith() will replace the element', function (assert) {
   let doc = MockDocument();
   let $el = $('#replace-with-tester')

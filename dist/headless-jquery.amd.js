@@ -133,6 +133,15 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       $(this.element).replaceWith(html);
       this.document[TRIGGER]('setOuterHTML', this.selector, html);
       this.document[TRIGGER]('change');
+    },
+
+    data: function data(key, value) {
+      if (arguments.length === 2) {
+        $(this.element)[0].setAttribute('data-' + key, value);
+        this.document[TRIGGER]('setData', this.selector, 'data-' + key, value);
+        this.document[TRIGGER]('change');
+      }
+      return $(this.element).data(key);
     }
   };
 

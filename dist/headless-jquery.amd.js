@@ -86,12 +86,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       return this.document[LOOKUP](parent);
     },
 
-    siblings: function siblings() {
-      return castJQueryToCollection($(this.element).parent().children(), this);
+    siblings: function siblings(selector) {
+      return castJQueryToCollection($(this.element).parent().children(selector), this);
     },
 
-    children: function children() {
-      return castJQueryToCollection($(this.element).children(), this);
+    children: function children(selector) {
+      return castJQueryToCollection($(this.element).children(selector), this);
     },
 
     contains: function contains(other) {
@@ -177,9 +177,9 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       return this[0].parent();
     },
 
-    children: function children() {
+    children: function children(selector) {
       var children = this.map(function (element) {
-        return element.children().toArray();
+        return element.children(selector).toArray();
       }).reduce(function (a, b) {
         return a.concat(b);
       }, []).reduce(function (collection, item) {

@@ -129,12 +129,6 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       return $(this.element).css(key);
     },
 
-    replaceWith: function replaceWith(html) {
-      $(this.element).replaceWith(html);
-      this.document[TRIGGER]('setOuterHTML', this.selector, html);
-      this.document[TRIGGER]('change');
-    },
-
     data: function data(key, value) {
       if (arguments.length === 2) {
         $(this.element)[0].setAttribute('data-' + key, value);
@@ -142,6 +136,24 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
         this.document[TRIGGER]('change');
       }
       return $(this.element).data(key);
+    },
+
+    append: function append(html) {
+      $(this.element).append(html);
+      this.document[TRIGGER]('appendHTML', this.selector, html);
+      this.document[TRIGGER]('change');
+    },
+
+    prepend: function prepend(html) {
+      $(this.element).prepend(html);
+      this.document[TRIGGER]('prependHTML', this.selector, html);
+      this.document[TRIGGER]('change');
+    },
+
+    replaceWith: function replaceWith(html) {
+      $(this.element).replaceWith(html);
+      this.document[TRIGGER]('setOuterHTML', this.selector, html);
+      this.document[TRIGGER]('change');
     }
   };
 
@@ -225,8 +237,8 @@ define('headless-jquery', ['exports', 'module', 'headless-jquery/document', 'hea
   var DOCUMENT = _Symbol['default']();
 
   function Root(html) {
-    var parser = new DOMParser();
-    this.document = parser.parseFromString(html, 'text/html');
+    this.document = document.implementation.createHTMLDocument();
+    this.document.documentElement.innerHTML = html;
 
     this[EVENTS] = {};
     this[DOCUMENT] = new _Document['default'](this);

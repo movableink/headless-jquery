@@ -1,9 +1,9 @@
-import V$ from 'headless-jquery';
+import $ from 'headless-jquery';
 
 module('headless-jquery');
 
 test('toString returns the HTML serialized back to a string', function (assert) {
-  let $html = V$(`
+  let $html = $(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -17,7 +17,7 @@ test('toString returns the HTML serialized back to a string', function (assert) 
 });
 
 test('find() returns the element that matches the selector', function (assert) {
-  let $html = V$(`
+  let $html = $(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -35,27 +35,27 @@ test('find() returns the element that matches the selector', function (assert) {
 test('event subscriptions can be triggered', function (assert) {
   assert.expect(1);
 
-  let $ = V$('');
-  $.on('setStyle', function (...args) {
+  let $html = $('');
+  $html.on('setStyle', function (...args) {
     assert.deepEqual(args, ['nav', 'backgroundColor', 'blue']);
   });
-  $.on('setAttr', function () {
+  $html.on('setAttr', function () {
     assert.ok(false);
   });
 
-  $.trigger('setStyle', 'nav', 'backgroundColor', 'blue');
+  $html.trigger('setStyle', 'nav', 'backgroundColor', 'blue');
 });
 
 test('removed event handlers will not be triggered', function (assert) {
   assert.expect(1);
 
-  let $ = V$('');
+  let $html = $('');
   let callback = function () {
     assert.ok(true);
   };
 
-  $.on('change', callback);
-  $.trigger('change');
-  $.off('change', callback);
-  $.trigger('change');
+  $html.on('change', callback);
+  $html.trigger('change');
+  $html.off('change', callback);
+  $html.trigger('change');
 });

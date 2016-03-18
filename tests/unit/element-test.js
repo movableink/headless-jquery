@@ -266,3 +266,51 @@ test('replacing an element will trigger a setOuterHTML event and a change event'
   assert.deepEqual(doc.change.called, 1);
   assert.deepEqual(doc.change.calledWith, []);
 });
+
+test('append() will append HTML to the element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture')
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='appended'></span>");
+
+  assert.ok($('#appended').length);
+  assert.ok($('#appended').index() !== 0);
+});
+
+test('appending an element will trigger a appendHTML event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture');
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='appended-event'></span>");
+
+  assert.deepEqual(doc.appendHTML.called, 1);
+  assert.deepEqual(doc.appendHTML.calledWith, ['#qunit-fixture', "<span id='appended-event'></span>"]);
+  assert.deepEqual(doc.change.called, 1);
+  assert.deepEqual(doc.change.calledWith, []);
+});
+
+test('prepend() will append HTML to the element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture')
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='prepended'></span>");
+
+  assert.ok($('#prepended').length);
+  assert.ok($('#prepended').index() !== 0);
+});
+
+test('appending an element will trigger a prependHTML event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture');
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='prepended-event'></span>");
+
+  assert.deepEqual(doc.appendHTML.called, 1);
+  assert.deepEqual(doc.appendHTML.calledWith, ['#qunit-fixture', "<span id='prepended-event'></span>"]);
+  assert.deepEqual(doc.change.called, 1);
+  assert.deepEqual(doc.change.calledWith, []);
+});

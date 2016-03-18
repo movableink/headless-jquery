@@ -94,7 +94,7 @@ test('siblings returns an array of wrapped elements', function (assert) {
   let test = el.siblings();
   assert.ok(Array.isArray(test));
   assert.ok(test[0] instanceof Element);
-  assert.equal(test.length, 6);
+  assert.equal(test.length, 7);
 });
 
 test('children returns an array of wrapped elements', function (assert) {
@@ -296,21 +296,21 @@ test('prepend() will append HTML to the element', function (assert) {
   let $el = $('#qunit-fixture')
   let el = new Element($el[0], doc);
 
-  el.append("<span id='prepended'></span>");
+  el.prepend("<span id='prepended'></span>");
 
   assert.ok($('#prepended').length);
-  assert.ok($('#prepended').index() !== 0);
+  assert.equal($('#prepended').index(), 0);
 });
 
-test('appending an element will trigger a prependHTML event and a change event', function (assert) {
+test('prepending an element will trigger a prependHTML event and a change event', function (assert) {
   let doc = MockDocument();
   let $el = $('#qunit-fixture');
   let el = new Element($el[0], doc);
 
-  el.append("<span id='prepended-event'></span>");
+  el.prepend("<span id='prepended-event'></span>");
 
-  assert.deepEqual(doc.appendHTML.called, 1);
-  assert.deepEqual(doc.appendHTML.calledWith, ['#qunit-fixture', "<span id='prepended-event'></span>"]);
+  assert.deepEqual(doc.prependHTML.called, 1);
+  assert.deepEqual(doc.prependHTML.calledWith, ['#qunit-fixture', "<span id='prepended-event'></span>"]);
   assert.deepEqual(doc.change.called, 1);
   assert.deepEqual(doc.change.calledWith, []);
 });

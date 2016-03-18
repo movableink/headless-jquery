@@ -157,41 +157,33 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     }
   };
 
-  var CollectionMethods = {
-    html: function html(value) {
-      if (arguments.length === 1) {
+  function createAccessor(name, _ref) {
+    var arity = _ref.arity;
+
+    return function () {
+      var _;
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      if (args.length === arity) {
         this.forEach(function (element) {
-          element.html(value);
+          element[name].apply(element, args);
         });
       }
-      return this[0].html();
-    },
+      return (_ = this[0])[name].apply(_, args);
+    };
+  }
 
-    attr: function attr(attrName, value) {
-      if (arguments.length === 2) {
-        this.forEach(function (element) {
-          element.attr(attrName, value);
-        });
+  function createInvokeEach(name) {
+    return function () {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
       }
-      return this[0].attr(attrName);
-    },
 
-    css: function css(attrName, value) {
-      if (arguments.length === 2) {
-        this.forEach(function (element) {
-          element.css(attrName, value);
-        });
-      }
-      return this[0].css(attrName);
-    },
-
-    parent: function parent() {
-      return this[0].parent();
-    },
-
-    children: function children(selector) {
-      var children = this.map(function (element) {
-        return element.children(selector).toArray();
+      return castCollection(this.map(function (element) {
+        return element[name].apply(element, args);
       }).reduce(function (a, b) {
         return a.concat(b);
       }, []).reduce(function (collection, item) {
@@ -199,9 +191,27 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
           collection.push(item);
         }
         return collection;
-      }, []);
+      }, []), this);
+    };
+  }
 
-      return castCollection(children, this);
+  var CollectionMethods = {
+    html: createAccessor('html', { arity: 1 }),
+    attr: createAccessor('attr', { arity: 2 }),
+    css: createAccessor('css', { arity: 2 }),
+    data: createAccessor('data', { arity: 2 }),
+
+    append: createInvokeEach('append'),
+    prepend: createInvokeEach('prepend'),
+    replaceWith: createInvokeEach('replaceWith'),
+
+    $: createInvokeEach('$'),
+    find: createInvokeEach('find'),
+    siblings: createInvokeEach('siblings'),
+    children: createInvokeEach('children'),
+
+    parent: function parent() {
+      return this[0].parent();
     }
   };
 

@@ -131,7 +131,11 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
 
     data: function data(key, value) {
       if (arguments.length === 2) {
-        $(this.element)[0].setAttribute('data-' + key, value);
+        if (value instanceof Object) {
+          $(this.element).data(key, value);
+        } else {
+          $(this.element)[0].setAttribute('data-' + key, value);
+        }
         this.document[TRIGGER]('setData', this.selector, 'data-' + key, value);
         this.document[TRIGGER]('change');
       }

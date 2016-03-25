@@ -1,6 +1,6 @@
 {
   "name": "headless-jquery",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "jQuery API for HTML strings",
   "main": "dist/headless-jquery.js",
   "scripts": {

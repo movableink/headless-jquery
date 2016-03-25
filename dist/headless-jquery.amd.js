@@ -40,17 +40,20 @@ define('headless-jquery/document', ['exports', 'module', 'headless-jquery/elemen
 
   module.exports = Document;
 });
-define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol', 'headless-jquery/selector-for-element'], function (exports, module, _headlessJquerySymbol, _headlessJquerySelectorForElement) {
+define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol', 'headless-jquery/map', 'headless-jquery/selector-for-element'], function (exports, module, _headlessJquerySymbol, _headlessJqueryMap, _headlessJquerySelectorForElement) {
   'use strict';
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
   var _Symbol = _interopRequireDefault(_headlessJquerySymbol);
 
+  var _Map = _interopRequireDefault(_headlessJqueryMap);
+
   var _selectorForElement = _interopRequireDefault(_headlessJquerySelectorForElement);
 
   var LOOKUP = _Symbol['default']['for']('lookup');
   var TRIGGER = _Symbol['default']['for']('trigger');
+  var DATA = _Symbol['default']['for']('data');
 
   function Element(element, document) {
     this.element = element;
@@ -60,6 +63,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       this.tagName = element.tagName.toLowerCase();
     }
     this.document = document;
+    this[DATA] = new _Map['default']();
   }
 
   Element.prototype = {
@@ -132,14 +136,19 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     data: function data(key, value) {
       if (arguments.length === 2) {
         if (value instanceof Object) {
-          $(this.element).data(key, value);
+          this[DATA].set(key, value);
         } else {
           $(this.element)[0].setAttribute('data-' + key, value);
+          this.document[TRIGGER]('setData', this.selector, 'data-' + key, value);
+          this.document[TRIGGER]('change');
         }
-        this.document[TRIGGER]('setData', this.selector, 'data-' + key, value);
-        this.document[TRIGGER]('change');
       }
-      return $(this.element).data(key);
+
+      if (value instanceof Object) {
+        return this[DATA].get(key);
+      } else {
+        return $(this.element).data(key);
+      }
     },
 
     append: function append(html) {

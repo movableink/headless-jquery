@@ -85,8 +85,8 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       return this.$(selector);
     },
 
-    parent: function parent() {
-      var parent = $(this.element).parent()[0];
+    parent: function parent(selector) {
+      var parent = $(this.element).parent(selector)[0];
       return this.document[LOOKUP](parent);
     },
 
@@ -167,6 +167,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       $(this.element).replaceWith(html);
       this.document[TRIGGER]('setOuterHTML', this.selector, html);
       this.document[TRIGGER]('change');
+    },
+
+    remove: function remove() {
+      $(this.element).remove();
+      this.document[TRIGGER]('remove', this.selector);
+      this.document[TRIGGER]('change');
     }
   };
 
@@ -217,14 +223,15 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     append: createInvokeEach('append'),
     prepend: createInvokeEach('prepend'),
     replaceWith: createInvokeEach('replaceWith'),
+    remove: createInvokeEach('remove'),
 
     $: createInvokeEach('$'),
     find: createInvokeEach('find'),
     siblings: createInvokeEach('siblings'),
     children: createInvokeEach('children'),
 
-    parent: function parent() {
-      return this[0].parent();
+    parent: function parent(selector) {
+      return this[0].parent(selector);
     }
   };
 

@@ -94,7 +94,7 @@ test('siblings returns an array of wrapped elements', function (assert) {
   let test = el.siblings();
   assert.ok(Array.isArray(test));
   assert.ok(test[0] instanceof Element);
-  assert.equal(test.length, 7);
+  assert.equal(test.length, 9);
 });
 
 test('children returns an array of wrapped elements', function (assert) {
@@ -263,6 +263,30 @@ test('replacing an element will trigger a setOuterHTML event and a change event'
 
   assert.deepEqual(doc.setOuterHTML.called, 1);
   assert.deepEqual(doc.setOuterHTML.calledWith, ['#replace-with-tester-event', "<span id='replaced-event'></span>"]);
+  assert.deepEqual(doc.change.called, 1);
+  assert.deepEqual(doc.change.calledWith, []);
+});
+
+
+test('remove() will remove the element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#remove-tester')
+  let el = new Element($el[0], doc);
+
+  el.remove();
+
+  assert.notOk($('#remove-tester').length);
+});
+
+test('removing an element will trigger a remove event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#remove-tester-event')
+  let el = new Element($el[0], doc);
+
+  el.remove();
+
+  assert.deepEqual(doc.remove.called, 1);
+  assert.deepEqual(doc.remove.calledWith, ['#remove-tester-event']);
   assert.deepEqual(doc.change.called, 1);
   assert.deepEqual(doc.change.calledWith, []);
 });

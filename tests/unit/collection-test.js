@@ -79,7 +79,7 @@ test('siblings returns an array of wrapped elements', function (assert) {
   let test = el.find('#test-id').siblings();
   assert.ok(Array.isArray(test));
   assert.ok(test[0] instanceof Element);
-  assert.equal(test.length, 7);
+  assert.equal(test.length, 9);
 });
 
 test('children returns an array of wrapped elements', function (assert) {
@@ -172,6 +172,16 @@ test('replaceWith() will replace the element', function (assert) {
 
   assert.notOk($('.replace-collection').length);
   assert.ok($('.replaced').length);
+});
+
+test('remove() will remove the elements', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#test-collection')
+  let el = new Element($el[0], doc);
+
+  el.find('.remove-collection').remove();
+
+  assert.notOk($('.remove-collection').length);
 });
 
 test('append() will append HTML to the element', function (assert) {

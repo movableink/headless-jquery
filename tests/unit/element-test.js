@@ -315,6 +315,33 @@ test('appending an element will trigger a appendHTML event and a change event', 
   assert.deepEqual(doc.change.calledWith, []);
 });
 
+test('append() can move an element', function (assert) {
+  let doc = MockDocument();
+  let container = new Element($('#qunit-fixture')[0], doc);
+  container.append("<span id='to-move'></span>");
+
+  let toMove = container.find('#to-move');
+  let tester = container.find('.test-class');
+  tester.append(toMove);
+
+  assert.ok($('.test-class #to-move').length);
+});
+
+test('moving an element will trigger a moveElement event and a change event', function (assert) {
+  let doc = MockDocument();
+  let container = new Element($('#qunit-fixture')[0], doc);
+  container.append("<span id='to-move-event'></span>");
+
+  let toMove = container.find('#to-move-event');
+  let tester = container.find('#test-collection');
+  tester.append(toMove);
+
+  assert.deepEqual(doc.moveElement.called, 1);
+  assert.deepEqual(doc.moveElement.calledWith, ['#test-collection', '#to-move-event']);
+  assert.deepEqual(doc.change.called, 2);
+  assert.deepEqual(doc.change.calledWith, []);
+});
+
 test('prepend() will append HTML to the element', function (assert) {
   let doc = MockDocument();
   let $el = $('#qunit-fixture')

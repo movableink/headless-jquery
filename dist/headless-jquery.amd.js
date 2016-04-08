@@ -152,8 +152,21 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     },
 
     append: function append(html) {
-      $(this.element).append(html);
-      this.document[TRIGGER]('appendHTML', this.selector, html);
+      var _this = this;
+
+      if (typeof html === 'string') {
+        $(this.element).append(html);
+        this.document[TRIGGER]('appendHTML', this.selector, html);
+      } else {
+        var elements = html;
+        if (!Array.isArray(elements)) {
+          elements = [elements];
+        }
+        elements.forEach(function (element) {
+          $(_this.element).append($(element.element));
+          _this.document[TRIGGER]('moveElement', _this.selector, element.selector);
+        });
+      }
       this.document[TRIGGER]('change');
     },
 
@@ -172,6 +185,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     remove: function remove() {
       $(this.element).remove();
       this.document[TRIGGER]('remove', this.selector);
+      this.document[TRIGGER]('change');
+    },
+
+    unwrap: function unwrap() {
+      $(this.element).unwrap();
+      this.document[TRIGGER]('unwrap', this.selector);
       this.document[TRIGGER]('change');
     }
   };
@@ -224,6 +243,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     prepend: createInvokeEach('prepend'),
     replaceWith: createInvokeEach('replaceWith'),
     remove: createInvokeEach('remove'),
+    unwrap: createInvokeEach('unwrap'),
 
     $: createInvokeEach('$'),
     find: createInvokeEach('find'),

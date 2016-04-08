@@ -365,3 +365,29 @@ test('prepending an element will trigger a prependHTML event and a change event'
   assert.deepEqual(doc.change.called, 1);
   assert.deepEqual(doc.change.calledWith, []);
 });
+
+test('unwrap() will remove the parents element', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture')
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='unwrap-parent'><span id='unwrap-me'></span></span>");
+  el.find('#unwrap-me').unwrap();
+
+  assert.notOk($('#unwrap-parent').length);
+  assert.ok($('#unwrap-me').length);
+});
+
+test('unwrapping an element will trigger an unwrap event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture');
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='unwrap-parent'><span id='unwrap-event'></span></span>");
+  el.find('#unwrap-event').unwrap();
+
+  assert.deepEqual(doc.unwrap.called, 1);
+  assert.deepEqual(doc.unwrap.calledWith, ['#unwrap-event']);
+  assert.deepEqual(doc.change.called, 2);
+  assert.deepEqual(doc.change.calledWith, []);
+});

@@ -4,7 +4,7 @@
     "qunit": "~1.18.0",
     "jquery": "^2.2.1"
   },
-  "version": "0.1.12",
+  "version": "0.1.13",
   "homepage": "https://github.com/movableink/headless-jquery",
   "authors": [
     "Tim Evans <tevans@movableink.com>"

@@ -176,6 +176,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       this.document[TRIGGER]('change');
     },
 
+    after: function after(html) {
+      $(this.element).after(html);
+      this.document[TRIGGER]('after', this.selector, html);
+      this.document[TRIGGER]('change');
+    },
+
     replaceWith: function replaceWith(html) {
       $(this.element).replaceWith(html);
       this.document[TRIGGER]('setOuterHTML', this.selector, html);
@@ -241,6 +247,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
 
     append: createInvokeEach('append'),
     prepend: createInvokeEach('prepend'),
+    after: createInvokeEach('after'),
     replaceWith: createInvokeEach('replaceWith'),
     remove: createInvokeEach('remove'),
     unwrap: createInvokeEach('unwrap'),

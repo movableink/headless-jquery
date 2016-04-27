@@ -106,7 +106,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       if (arguments.length === 1) {
         $(this.element).html(value);
         this.document[TRIGGER]('setHTML', this.selector, value);
-        this.document[TRIGGER]('change');
+        this.document[TRIGGER]('change', 'html');
       }
       return $(this.element).html();
     },
@@ -115,7 +115,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       if (arguments.length === 2) {
         $(this.element).attr(attrName, value);
         this.document[TRIGGER]('setAttr', this.selector, attrName, value);
-        this.document[TRIGGER]('change');
+        this.document[TRIGGER]('change', 'attr');
 
         if (attrName === 'id' || attrName === 'class') {
           this.selector = _selectorForElement['default']($(this.element));
@@ -128,7 +128,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       if (arguments.length === 2) {
         $(this.element).css(key, value);
         this.document[TRIGGER]('setStyle', this.selector, key, value);
-        this.document[TRIGGER]('change');
+        this.document[TRIGGER]('change', 'css');
       }
       return $(this.element).css(key);
     },
@@ -140,7 +140,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
         } else {
           $(this.element)[0].setAttribute('data-' + key, value);
           this.document[TRIGGER]('setData', this.selector, 'data-' + key, value);
-          this.document[TRIGGER]('change');
+          this.document[TRIGGER]('change', 'data');
         }
       }
 
@@ -167,43 +167,43 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
           _this.document[TRIGGER]('moveElement', _this.selector, element.selector);
         });
       }
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     prepend: function prepend(html) {
       $(this.element).prepend(html);
       this.document[TRIGGER]('prependHTML', this.selector, html);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     after: function after(html) {
       $(this.element).after(html);
       this.document[TRIGGER]('after', this.selector, html);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     replaceWith: function replaceWith(html) {
       $(this.element).replaceWith(html);
       this.document[TRIGGER]('setOuterHTML', this.selector, html);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     remove: function remove() {
       $(this.element).remove();
       this.document[TRIGGER]('remove', this.selector);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     wrap: function wrap(html) {
       $(this.element).wrap(html);
       this.document[TRIGGER]('wrap', this.selector, html);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     },
 
     unwrap: function unwrap() {
       $(this.element).unwrap();
       this.document[TRIGGER]('unwrap', this.selector);
-      this.document[TRIGGER]('change');
+      this.document[TRIGGER]('change', 'html');
     }
   };
 

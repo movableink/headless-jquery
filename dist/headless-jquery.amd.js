@@ -194,6 +194,12 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
       this.document[TRIGGER]('change');
     },
 
+    wrap: function wrap(html) {
+      $(this.element).wrap(html);
+      this.document[TRIGGER]('wrap', this.selector, html);
+      this.document[TRIGGER]('change');
+    },
+
     unwrap: function unwrap() {
       $(this.element).unwrap();
       this.document[TRIGGER]('unwrap', this.selector);
@@ -250,6 +256,7 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     after: createInvokeEach('after'),
     replaceWith: createInvokeEach('replaceWith'),
     remove: createInvokeEach('remove'),
+    wrap: createInvokeEach('wrap'),
     unwrap: createInvokeEach('unwrap'),
 
     $: createInvokeEach('$'),

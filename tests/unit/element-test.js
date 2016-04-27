@@ -392,6 +392,32 @@ test('unwrapping an element will trigger an unwrap event and a change event', fu
   assert.deepEqual(doc.change.calledWith, []);
 });
 
+test('wrap() will wrap an element with HTML', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture')
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='wrap-me'></span>");
+  el.find('#wrap-me').wrap("<a id='wrapper'></a>");
+
+  assert.ok($('#wrapper').length);
+  assert.ok($('#wrap-me').length);
+});
+
+test('wrapping an element will trigger a wrap event and a change event', function (assert) {
+  let doc = MockDocument();
+  let $el = $('#qunit-fixture');
+  let el = new Element($el[0], doc);
+
+  el.append("<span id='wrap-me-event'></span>");
+  el.find('#wrap-me-event').wrap("<a id='wrapper-event'></a>");
+
+  assert.deepEqual(doc.wrap.called, 1);
+  assert.deepEqual(doc.wrap.calledWith, ['#wrap-me-event', "<a id='wrapper-event'></a>"]);
+  assert.deepEqual(doc.change.called, 2);
+  assert.deepEqual(doc.change.calledWith, []);
+});
+
 test('after() will append HTML after the element', function (assert) {
   let doc = MockDocument();
   let $el = $('#qunit-fixture')

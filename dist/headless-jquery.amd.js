@@ -211,8 +211,6 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
     var arity = _ref.arity;
 
     return function () {
-      var _;
-
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
@@ -222,7 +220,14 @@ define('headless-jquery/element', ['exports', 'module', 'headless-jquery/symbol'
           element[name].apply(element, args);
         });
       }
-      return (_ = this[0])[name].apply(_, args);
+
+      if (this.length) {
+        var _;
+
+        return (_ = this[0])[name].apply(_, args);
+      } else {
+        return null;
+      }
     };
   }
 
